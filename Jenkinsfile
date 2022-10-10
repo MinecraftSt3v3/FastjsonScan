@@ -18,13 +18,12 @@ pipeline {
       when {
         buildingTag()
       }
-
       environment {
         GITHUB_TOKEN = credentials('github-token')
       }
 
       steps {
-        sh 'curl -sfL https://goreleaser.com/static/run | bash'
+      	sh 'goreleaser release --snapshot --rm-dist'
       }
     }
   }
