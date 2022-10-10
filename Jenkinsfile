@@ -4,13 +4,13 @@ pipeline {
   stages {
     stage('Compile') {
       steps {
-        sh 'go build'
+        sh 'goreleaser build --rm-dist'
       }
     }
 
     stage('Test') {
       steps {
-        sh 'go test ./...'
+        echo 'Passed the first stage'
       }
     }
 
