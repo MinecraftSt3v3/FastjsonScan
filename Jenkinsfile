@@ -3,26 +3,20 @@ pipeline {
   stages {
     stage('Compile') {
       steps {
-        sh 'goreleaser build --rm-dist'
-      }
-    }
-
-    stage('Test') {
-      steps {
-        echo 'Passed the first stage'
+        sh 'go build'
       }
     }
 
     stage ('Release') {
-      when {
-        buildingTag()
-      }
       environment {
         GITHUB_TOKEN = credentials('github-token')
       }
 
       steps {
-      	sh 'goreleaser release --snapshot --rm-dist'
+	sh 'git config --global user.name "Ryan Hoofard"'
+	sh 'git config --global user.email "rhoofard2000@gmail.com"'
+	sh 'git tag -a v0.1.23 -m "First release"'
+	sh 'goreleaser release --rm-dist'
       }
     }
   }
