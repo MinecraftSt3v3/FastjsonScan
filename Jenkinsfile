@@ -3,17 +3,20 @@ pipeline {
   stages {
     stage('Compile') {
       steps {
-        sh 'go build'
+      	sh 'goreleaser build --rm-dist'
       }
     }
 
     stage ('Release') {
-      environment {
-        GITHUB_TOKEN = credentials('github-token')
-      }
+      	when {
+		expression {
+		   env.BRANCH_NAME == 'main'
+		}
+	    }
 
       steps {
-	sh 'goreleaser release --rm-dist'
+	      sh 'curl -u admin:password123 -X PUT "172.17.0.2:8081/artifactory/libs-release/junit-4.13.3-SNAPSHOT.jar" -T "/home/alpuser/.jenkins/workspace/jenkins-releaser/target/junit-4.13.3-SNAPSHOT.jar"'
+	//sh 'goreleaser release --rm-dist'
       }
     }
   }
